@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prazeo.example/schemas/event-package-1.0.0.schema.json",
+  "title": "Prazeo EventPackage",
+  "description": "Declarative, untrusted import package. Import creates a draft; it never changes live inventory or payment state.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageId",
+    "organizationId",
+    "event",
+    "seatMap",
+    "pricingPolicies"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "packageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "organizationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "externalId",
+        "title",
+        "timezone",
+        "venueRef",
+        "sessions"
+      ],
+      "properties": {
+        "externalId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "IANA time zone name for display and local scheduling."
+        },
+        "venueRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "sessions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 500,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "externalId",
+              "startsAt",
+              "salesOpenAt",
+              "salesCloseAt",
+              "currency"
+            ],
+            "properties": {
+              "externalId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "salesOpenAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "salesCloseAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "seatMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "externalId",
+        "sections"
+      ],
+      "properties": {
+        "externalId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "externalId",
+              "name",
+              "seats"
+            ],
+            "properties": {
+              "externalId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "seats": {
+                "type": "array",
+                "maxItems": 100000,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "externalId",
+                    "row",
+                    "number",
+                    "accessible"
+                  ],
+                  "properties": {
+                    "externalId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "row": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "number": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 32
+                    },
+                    "accessible": {
+                      "type": "boolean"
+                    },
+                    "companionFor": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 128
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pricingPolicies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "externalId",
+          "rules"
+        ],
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "rules": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10000,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "externalId",
+                "sectionRef",
+                "validFrom",
+                "validUntil",
+                "amountMinor",
+                "currency",
+                "maxPerOrder"
+              ],
+              "properties": {
+                "externalId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sectionRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "validFrom": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "validUntil": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "amountMinor": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000000000000
+                },
+                "currency": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{3}$"
+                },
+                "maxPerOrder": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Schema validation is necessary but insufficient. The importing service must additionally verify organization authorization, references, time ordering, currency consistency, uniqueness, capacity, and pricing invariants. Never trust this package for sold/held state, authorization, or payment data."
+}

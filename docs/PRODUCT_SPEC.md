@@ -179,11 +179,17 @@ EventPackage не допускает кода, SQL, URL для автомати�
           }]
         }]
       },
+      "tariffs": [{
+        "externalId": "adult",
+        "name": "Взрослый",
+        "eligibility": "unrestricted"
+      }],
       "pricingPolicies": [{
         "externalId": "early-price",
         "rules": [{
           "externalId": "early",
           "sectionRef": "floor",
+          "tariffRef": "adult",
           "validFrom": "2027-01-01T00:00:00Z",
           "validUntil": "2027-03-01T00:00:00Z",
           "amountMinor": 500000,
